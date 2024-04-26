@@ -19,7 +19,7 @@ export class Config {
   public static getWidgetWithTokenURL(token: string): string {
     return `${
       import.meta.env.VITE_FRONTEND_URL ?? 'http://localhost:3000'
-    }/v2/widget?token=${encodeURIComponent(token)}`
+    }/new/player?token=${encodeURIComponent(token)}`
   }
 
   public static getTwitchAppClientID(): string {
