@@ -19,8 +19,6 @@ export type AudioState = {
   }
 }
 
-const DEFAULT_VOLUME = 0.5
-
 const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   const ref = useRef<HTMLAudioElement>(null)
 
@@ -79,11 +77,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
         ref.current.play().catch(console.error)
       }
 
-      if (playbackControl.volume > 1) {
-        ref.current.volume = playbackControl.volume / 100
-      } else {
-        ref.current.volume = playbackControl.volume
-      }
+      ref.current.volume = playbackControl.volume
     }
   }, [playbackControl, ref.current])
 
@@ -98,7 +92,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
             console.error(e)
           })
       }
-      ref.current.volume = playbackInfo?.volume ?? DEFAULT_VOLUME
+      if (playbackInfo?.volume) ref.current.volume = playbackInfo?.volume
     }
     if (!song && onTimeUpdate) {
       onTimeUpdate(null)
@@ -106,8 +100,8 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   }, [song, ref.current, audioSource])
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.volume = playbackInfo?.volume ?? DEFAULT_VOLUME
+    if (ref.current && playbackInfo?.volume) {
+      ref.current.volume = playbackInfo?.volume
     }
   }, [playbackInfo?.volume, ref.current])
 
