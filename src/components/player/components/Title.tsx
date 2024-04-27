@@ -1,13 +1,11 @@
 import React, { useContext } from 'react'
 import BackendSongContext from '../context/BackendSongContext.ts'
+import Marquee from 'react-fast-marquee'
 
 const Title = () => {
   const song = useContext(BackendSongContext)
 
-  const title =
-    (song?.title || '').length > 15
-      ? `${(song?.title || '').substring(0, 15)}...`
-      : song?.title || ''
+  const title = song?.title
 
   return (
     <p
@@ -21,7 +19,7 @@ const Title = () => {
         lineHeight: 'normal',
       }}
     >
-      {title}
+      <Marquee>{title}</Marquee>
     </p>
   )
 }

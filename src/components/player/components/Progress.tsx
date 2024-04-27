@@ -93,6 +93,8 @@ const Progress = () => {
             height: 'calc(0.3125rem + (100vw - 800px) / 100)',
             backgroundColor: 'var(--base-white, #FFF)',
             width: `${progressWidth}%`,
+            transition: 'width 1s',
+            borderRadius: 'calc(-8px + 0.25rem + 1vw)',
           }}
         ></span>
       </div>

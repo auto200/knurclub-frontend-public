@@ -4,6 +4,7 @@ import React from 'react'
 
 const u = new URLSearchParams(window.location.search)
 const token = u.get('token') ?? ''
+
 function Player() {
   return (
     <WebSocketWrapper token={token}>

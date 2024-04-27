@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import BackendSongContext from '../context/BackendSongContext.ts'
+import Marquee from 'react-fast-marquee'
 
 const Subtitle = () => {
   const song = useContext(BackendSongContext)
@@ -23,7 +24,7 @@ const Subtitle = () => {
           lineHeight: 'normal',
         }}
       >
-        {song?.subtitle}
+        <Marquee>{song?.subtitle}</Marquee>
       </p>
     </div>
   )
