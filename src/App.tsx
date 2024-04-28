@@ -2,7 +2,6 @@ import { OAuthHandler } from './components/OAuthHandler'
 import PolakWidget from './components/PolakWidget'
 import { Home } from './components/Home'
 import { useNavigation } from './hooks/useNavigation'
-import { V2WidgetWrapper } from './components/V2WidgetWrapper'
 import { PersistentStore } from './util/PersistentStore'
 import { HomeUser } from './components/HomeUser'
 import Player from './components/player/Player.tsx'
@@ -29,9 +28,8 @@ export const App = () => {
       return <PolakWidget />
     case '/oauth-flow':
       return <OAuthHandler />
-    case '/v2/widget':
-      return <V2WidgetWrapper />
     case '/new/player':
+    case '/sr/widget':
       return <Player />
     default:
       return token ? <HomeUser /> : <Home />
