@@ -21,7 +21,6 @@ import {
 import { songAudioCacheGet, songAudioCacheSet } from '../util/cacheUtils.ts'
 import BackendSongContext from '../context/BackendSongContext.ts'
 import PlaybackControlContext from '../context/PlaybackControlContext.ts'
-import deepEqual from 'deep-equal'
 
 type WebSocketWrapperProps = {
   token: string
@@ -99,9 +98,7 @@ export function WebSocketWrapper(props: WebSocketWrapperProps) {
       }
       case WSNetworkFrameType.SR_V1_PLAYBACK_CONTROL_UPDATE: {
         const parsed = data as SR_V1_PLAYBACK_CONTROL_UPDATE
-        if (!deepEqual(parsed.params, playbackControl)) {
-          setPlaybackControl(parsed.params)
-        }
+        setPlaybackControl(parsed.params)
         break
       }
       default:

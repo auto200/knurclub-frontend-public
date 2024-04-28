@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import BackendSongContext from '../context/BackendSongContext.ts'
 import PlaybackInfoContext from '../context/PlaybackInfoContext.ts'
 import { useAudioSourceCache } from '../hooks/useAudioSourceCache.ts'
@@ -33,6 +33,19 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
       //onEnded(e as Error)
     }
   }
+
+  const setVolume = useCallback(
+    (volume: number) => {
+      if (ref.current) {
+        if (ref.current.volume === volume) return
+        console.log(
+          'Updating volume -> ' + ref.current.volume + ' to ' + volume
+        )
+        ref.current.volume = volume
+      }
+    },
+    [ref.current]
+  )
 
   const generateCurrentAudioState = (element: HTMLAudioElement): AudioState => {
     return {
@@ -77,7 +90,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
         ref.current.play().catch(console.error)
       }
 
-      ref.current.volume = playbackControl.volume
+      setVolume(playbackControl.volume)
     }
   }, [playbackControl, ref.current])
 
@@ -92,7 +105,9 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
             console.error(e)
           })
       }
-      if (playbackInfo?.volume) ref.current.volume = playbackInfo?.volume
+      if (playbackInfo?.volume) {
+        setVolume(playbackInfo.volume)
+      }
     }
     if (!song && onTimeUpdate) {
       onTimeUpdate(null)
@@ -101,9 +116,9 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
 
   useEffect(() => {
     if (ref.current && playbackInfo?.volume) {
-      ref.current.volume = playbackInfo?.volume
+      setVolume(playbackInfo.volume)
     }
-  }, [playbackInfo?.volume, ref.current])
+  }, [playbackInfo, ref.current])
 
   if (!song || !audioSource) {
     return null
@@ -111,6 +126,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
 
   return (
     <audio
+      id={'jasper'}
       src={audioSource}
       onError={handleError}
       onPlay={handlePlaybackStart}
