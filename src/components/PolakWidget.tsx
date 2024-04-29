@@ -58,6 +58,14 @@ export default function PolakWidget() {
   const u = new URLSearchParams(window.location.search)
   const token = u.get('token')
 
+  useEffect(() => {
+    const old = document.body.style.backgroundColor
+    document.body.style.backgroundColor = 'transparent'
+    return () => {
+      document.body.style.backgroundColor = old
+    }
+  }, [])
+
   const UpdateChain = () => {
     axios
       .get<{ event: AlertInfo | null }>(`${backendUrl}/v1/event`, {
