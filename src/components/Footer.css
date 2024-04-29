@@ -1,11 +1,9 @@
 @media (width <= 400px) {
   .Footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-
     height: 1.2rem;
     width: 100%;
+
+    bottom: 0;
 
     background-color: crimson;
 
@@ -27,10 +25,6 @@
 
 @media (width > 400px) {
   .Footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-
     height: 2rem;
     width: 100%;
 

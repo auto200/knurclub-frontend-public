@@ -1,7 +1,6 @@
 .HomeContainer {
   width: 100%;
   height: calc(100% - 4rem);
-  background-color: pink;
 
   text-align: center;
 }
