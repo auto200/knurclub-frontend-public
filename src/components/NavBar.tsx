@@ -74,17 +74,19 @@ export const NavBar = ({
               />
               Wyloguj się
             </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginLeft: '32px',
-                fontSize: '16px',
-                fontWeight: 700,
-              }}
-            >
-              <LuMoon size="18px" />
-            </div>
+            {1 !== 1 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: '32px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                }}
+              >
+                <LuMoon size="18px" />
+              </div>
+            )}
           </div>
         )}
         {!isLoggedIn && (
@@ -106,17 +108,19 @@ export const NavBar = ({
               />
               Zaloguj się
             </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginLeft: '32px',
-                fontSize: '16px',
-                fontWeight: 700,
-              }}
-            >
-              <LuMoon size="18px" />
-            </div>
+            {1 !== 1 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: '32px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                }}
+              >
+                <LuMoon size="18px" />
+              </div>
+            )}
           </div>
         )}
       </div>
