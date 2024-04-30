@@ -1,12 +1,23 @@
-import React from 'react'
-import { RxExit } from 'react-icons/rx'
+import { RxExit, RxLockClosed } from 'react-icons/rx'
 import { LuMoon } from 'react-icons/lu'
 import { LuSettings } from 'react-icons/lu'
 
 import { Logo } from './Logo'
 import './NavBar.css'
 
-export const NavBar: React.FC = () => {
+type NavBarProps = {
+  onLogout?: () => void
+  onSettingsOpen?: () => void
+  onLogin?: () => void
+  isLoggedIn: boolean
+}
+
+export const NavBar = ({
+  onLogout,
+  onSettingsOpen,
+  onLogin,
+  isLoggedIn,
+}: NavBarProps) => {
   return (
     <div
       style={{
@@ -30,46 +41,84 @@ export const NavBar: React.FC = () => {
         }}
       >
         <Logo style={{ marginLeft: '24px' }} size="80px" />
-        <div style={{ marginRight: '24px', display: 'flex' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginLeft: '32px',
-              fontSize: '16px',
-              fontWeight: 700,
-            }}
-          >
-            <LuSettings size="24px" style={{ marginRight: '9px' }} />
-            Ustawienia
+        {isLoggedIn && (
+          <div style={{ marginRight: '24px', display: 'flex' }}>
+            <div
+              onClick={() => onSettingsOpen?.()}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '32px',
+                fontSize: '16px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              <LuSettings size="24px" style={{ marginRight: '9px' }} />
+              Ustawienia
+            </div>
+            <div
+              onClick={() => onLogout?.()}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '32px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                fontWeight: 700,
+              }}
+            >
+              <RxExit
+                size="14px"
+                style={{ marginRight: '9px', color: '#9D174D' }}
+              />
+              Wyloguj się
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '32px',
+                fontSize: '16px',
+                fontWeight: 700,
+              }}
+            >
+              <LuMoon size="18px" />
+            </div>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginLeft: '32px',
-              fontSize: '16px',
-              fontWeight: 700,
-            }}
-          >
-            <RxExit
-              size="14px"
-              style={{ marginRight: '9px', color: '#9D174D' }}
-            />
-            Wyloguj się
+        )}
+        {!isLoggedIn && (
+          <div style={{ marginRight: '24px', display: 'flex' }}>
+            <div
+              onClick={() => onLogin?.()}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '32px',
+                fontSize: '16px',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              <RxLockClosed
+                size="14px"
+                style={{ marginRight: '9px', color: '#9D174D' }}
+              />
+              Zaloguj się
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '32px',
+                fontSize: '16px',
+                fontWeight: 700,
+              }}
+            >
+              <LuMoon size="18px" />
+            </div>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginLeft: '32px',
-              fontSize: '16px',
-              fontWeight: 700,
-            }}
-          >
-            <LuMoon size="18px" />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )

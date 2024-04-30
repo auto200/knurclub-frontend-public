@@ -8,7 +8,9 @@ import { NavBar } from './NavBar'
 import './Home.css'
 import Footer from './Footer'
 import { Logo } from './Logo'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
+import { PersistentStore } from '../util/PersistentStore.ts'
+import { Settings } from './Settings.tsx'
 
 type HomeProps = {
   children?: ReactNode
@@ -20,6 +22,9 @@ export const Home = ({ children }: HomeProps) => {
       scopes
     ).join('+')}`
   }
+
+  const [isSettingsViewEnabled, setIsSettingsViewEnabled] = useState(false)
+
   const doTwitchAuth = () => {
     window.location.href = makeRedirectUrl(
       Config.getTwitchAppClientID(),
@@ -27,11 +32,30 @@ export const Home = ({ children }: HomeProps) => {
     )
   }
 
+  const onLogOut = () => {
+    PersistentStore.removeKey('token')
+    window.location.href = '/'
+  }
+
+  const onOpenSettings = () => {
+    setIsSettingsViewEnabled(true)
+  }
+
+  const onClose = () => {
+    setIsSettingsViewEnabled(false)
+  }
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <NavBar />
+      <NavBar
+        onLogout={onLogOut}
+        onSettingsOpen={onOpenSettings}
+        onLogin={doTwitchAuth}
+        isLoggedIn={children !== undefined}
+      />
       <div className={'HomeContainer'}>
-        {children && children}
+        {children && !isSettingsViewEnabled && children}
+        {isSettingsViewEnabled && <Settings onClose={onClose} />}
         {!children && (
           <>
             <Logo

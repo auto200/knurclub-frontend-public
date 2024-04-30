@@ -4,6 +4,7 @@
     width: 100%;
 
     bottom: 0;
+    position: fixed;
 
     background-color: crimson;
 
@@ -27,6 +28,9 @@
   .Footer {
     height: 2rem;
     width: 100%;
+
+    bottom: 0;
+    position: fixed;
 
     background-color: crimson;
 
