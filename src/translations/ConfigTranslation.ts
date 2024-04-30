@@ -2,6 +2,10 @@ const TT: Record<string, string> = {
   data: 'Ustawienia',
   'data.songRequest': 'Song Request: Generalne',
   'data.songRequest.modSkipLimits': 'Moderatorzy omijają limity',
+  'data.songRequest.useDynamicSkip':
+    'Dynamiczny skip (zależny od aktywnych osób na chacie)',
+  'data.songRequest.dynamicSkipThreshold':
+    '% aktywnych osób na chacie (1 = 100%, 0.1 = 10%, etc)',
   'data.songRequest.queueMax': 'Maksymalna liczba piosenek w kolejce',
   'data.songRequest.allowModsControlVolume':
     'Moderatorzy mogą konrolować głośność',
@@ -9,6 +13,8 @@ const TT: Record<string, string> = {
     'Song Request: Minimalny limit wyświetleń piosenki',
   'data.songRequest.viewLimit.all': 'Wszyscy',
   'data.songRequest.viewLimit.paid': 'Subskrybenci',
+  'data.songRequest.dynamicSkipActivityPeriod':
+    'Okres liczenia aktywności dla dynamic skipa (w sekundach)',
   'data.songRequest.lengthLimit': 'Song Request: Maksymalna długość piosenki',
   'data.songRequest.lengthLimit.all': 'Wszyscy',
   'data.songRequest.lengthLimit.paid': 'Subskrybenci',

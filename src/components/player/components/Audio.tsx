@@ -30,7 +30,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   const handleError = (e: unknown) => {
     console.error(e)
     if (onEnded) {
-      //onEnded(e as Error)
+      onEnded(e as Error)
     }
   }
 
@@ -38,9 +38,6 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
     (volume: number) => {
       if (ref.current) {
         if (ref.current.volume === volume) return
-        console.log(
-          'Updating volume -> ' + ref.current.volume + ' to ' + volume
-        )
         ref.current.volume = volume
       }
     },
@@ -69,7 +66,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   const handlePlaybackEnd = () => {
     if (ref.current) {
       if (onEnded) {
-        //onEnded(generateCurrentAudioState(ref.current))
+        onEnded(generateCurrentAudioState(ref.current))
       }
     }
   }
@@ -77,7 +74,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   const handlePlaybackStart = () => {
     if (ref.current) {
       if (onPlay) {
-        //onPlay(generateCurrentAudioState(ref.current))
+        onPlay(generateCurrentAudioState(ref.current))
       }
     }
   }
@@ -126,7 +123,6 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
 
   return (
     <audio
-      id={'jasper'}
       src={audioSource}
       onError={handleError}
       onPlay={handlePlaybackStart}
