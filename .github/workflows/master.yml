@@ -17,7 +17,7 @@ jobs:
         run: >
           VITE_WSS_URL="wss://wss.knur.club"
           VITE_BACKEND_URL="https://api.knur.club" 
-          VITE_FRONTEND_URL="https://mamm0n.knur.club" 
+          VITE_FRONTEND_URL="https://knur.club" 
           npm run build
       - name: Build, tag, and push image to Docker Hub
         id: build-image
