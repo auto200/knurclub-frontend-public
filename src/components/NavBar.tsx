@@ -4,20 +4,17 @@ import { LuSettings } from 'react-icons/lu'
 
 import { Logo } from './Logo'
 import './NavBar.css'
+import { useContext } from 'react'
+import { AuthContext } from '../contexts/AuthContext.ts'
 
 type NavBarProps = {
-  onLogout?: () => void
   onSettingsOpen?: () => void
-  onLogin?: () => void
-  isLoggedIn: boolean
 }
 
-export const NavBar = ({
-  onLogout,
-  onSettingsOpen,
-  onLogin,
-  isLoggedIn,
-}: NavBarProps) => {
+export const NavBar = ({ onSettingsOpen }: NavBarProps) => {
+  const authContext = useContext(AuthContext)
+  if (!authContext) return null
+  const { isLoggedIn, login, logout } = authContext
   return (
     <div
       style={{
@@ -58,7 +55,7 @@ export const NavBar = ({
               Ustawienia
             </div>
             <div
-              onClick={() => onLogout?.()}
+              onClick={logout}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -92,7 +89,7 @@ export const NavBar = ({
         {!isLoggedIn && (
           <div style={{ marginRight: '24px', display: 'flex' }}>
             <div
-              onClick={() => onLogin?.()}
+              onClick={login}
               style={{
                 display: 'flex',
                 alignItems: 'center',

@@ -1,15 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export const useNavigation: () => [string, (xd: string) => void] = () => {
-  const [path, setPath] = useState(window.location.href)
-
-  window.addEventListener('popstate', () => {
-    setPath(window.location.href)
-  })
+export const useNavigation = () => {
+  const [path, setPath] = useState(window.location.pathname)
+  const [queryString, setQueryString] = useState(window.location.search)
 
   const doNavigation = (xxx: string) => {
     window.history.pushState({}, '', xxx)
   }
 
-  return [path, doNavigation]
+  useEffect(() => {
+    const onEvent = () => {
+      setPath(window.location.pathname)
+      setQueryString(window.location.search)
+    }
+    window.addEventListener('popstate', onEvent)
+
+    return () => {
+      window.removeEventListener('popstate', onEvent)
+    }
+  }, [])
+
+  return { path, queryString, doNavigation }
 }

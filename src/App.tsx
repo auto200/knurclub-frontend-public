@@ -5,33 +5,70 @@ import { useNavigation } from './hooks/useNavigation'
 import { PersistentStore } from './util/PersistentStore'
 import { HomeUser } from './components/HomeUser'
 import Player from './components/player/Player.tsx'
+import { AuthContext } from './contexts/AuthContext.ts'
+import { RouterContext } from './contexts/RouterContext.ts'
+import { useEffect, useState } from 'react'
+import { Config } from './Config.ts'
+import {
+  Features,
+  TwitchHelixScopeHelper,
+} from './util/TwitchHelixScopeHelper.ts'
 
-const baseRegExp =
-  /^https?:\/\/[a-zA-Z-0-9.]+:?[0-9]*([/A-Za-z0-9-_]+)\??(\S*)$/i
+const makeRedirectUrl = (clientId: string, redirectUrl: string) => {
+  const scopes: Features[] = [Features.SONG_REQUEST, Features.SOUND_ALERTS]
+  return `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUrl}&scope=${TwitchHelixScopeHelper.getHelixScopesForFeature(
+    scopes
+  ).join('+')}`
+}
 
 export const App = () => {
-  const [path] = useNavigation()
+  const { path, doNavigation, queryString } = useNavigation()
 
-  // Divine intervention.
-  if (path.length > 2137)
-    return <p>KURWO KASZTANIE REDOSERZE POGRZEB MI W SERZE</p>
+  const [token, setToken] = useState<string | null>(
+    PersistentStore.getKey('token')
+  )
 
-  const token = PersistentStore.getKey('token')
+  useEffect(() => {}, [path])
 
-  const matches = path.match(baseRegExp)
-  if (!matches) return token ? <HomeUser /> : <Home />
-
-  const [, route] = matches
-
-  switch (route) {
-    case '/v1/widget':
-      return <PolakWidget />
-    case '/oauth-flow':
-      return <OAuthHandler />
-    case '/new/player':
-    case '/sr/widget':
-      return <Player />
-    default:
-      return token ? <HomeUser /> : <Home />
+  const doLogin = () => {
+    window.location.href = makeRedirectUrl(
+      Config.getTwitchAppClientID(),
+      Config.getTwitchOAuthRedirectUrl()
+    )
   }
+
+  const doLogout = () => {
+    PersistentStore.removeKey('token')
+    setToken(null)
+    doNavigation('/')
+  }
+  function returnCurrentRoute() {
+    switch (path) {
+      case '/v1/widget':
+        return <PolakWidget />
+      case '/oauth-flow':
+        return <OAuthHandler />
+      case '/new/player':
+      case '/sr/widget':
+        return <Player />
+      default:
+        return token ? <HomeUser /> : <Home />
+    }
+  }
+
+  return (
+    <RouterContext.Provider
+      value={{ navigate: doNavigation, currentPath: path, queryString }}
+    >
+      <AuthContext.Provider
+        value={{
+          isLoggedIn: token !== null,
+          login: doLogin,
+          logout: doLogout,
+        }}
+      >
+        {returnCurrentRoute()}
+      </AuthContext.Provider>
+    </RouterContext.Provider>
+  )
 }
