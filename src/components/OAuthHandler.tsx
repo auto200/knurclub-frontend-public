@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Home } from './Home'
 import { PersistentStore } from '../util/PersistentStore'
 
+import './OAuthHandler.css'
+
 export const OAuthHandler: React.FC = () => {
   const u = new URLSearchParams(window.location.search)
   const [result, setResult] = useState<string | null>(null)
@@ -40,9 +42,9 @@ export const OAuthHandler: React.FC = () => {
   return (
     <Home>
       <div style={{ textAlign: 'center' }}>
-        {!code && !result && <h2>NIE MA KODA NIE MA LODA</h2>}
-        {code && !result && <h2>ZARA - DAJ MI MOMENT OK PROCESUJE SE</h2>}
-        {result === 'ERROR' && <h2>SORY GUWNO NIE MASZ DOSTEMPU MISIU</h2>}
+        <div style={{ marginTop: '10rem' }} className="lds-heart">
+          <div></div>
+        </div>
       </div>
     </Home>
   )
