@@ -1,15 +1,14 @@
 import { PersistentStore } from '../util/PersistentStore'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Config } from '../Config'
 import { ConfigContainer } from '../sharedTypes/ConfigTypes'
 import { ConfigKey } from './configEditor/ConfigKey'
+import { RouterContext } from '../contexts/RouterContext.ts'
 
-type HomeUserProps = {
-  onClose: () => void
-}
+export const Settings = () => {
+  const { navigate } = useContext(RouterContext)
 
-export const Settings = ({ onClose }: HomeUserProps) => {
   const token = PersistentStore.getKey('token')
   const backendUrl = Config.getNewBackendURL()
 
@@ -88,34 +87,31 @@ export const Settings = ({ onClose }: HomeUserProps) => {
         alert('OK ZAPISANED')
       })
       .catch(() => alert('AHA ERROR'))
-      .finally(() => onClose())
+      .finally(() => navigate('/'))
   }
 
   useEffect(() => {
     console.log(configData)
   }, [configData])
 
+  const [currentConfigPath, setCurrentConfigPath] = useState('data.songRequest')
+
   return (
     <>
-      <button style={{ marginTop: '1rem' }} onClick={onSave}>
-        ZAPISZ
-      </button>
       <div style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <button onClick={onSave}>ZAPISZ</button>
         {configData &&
           Object.keys(configData).map((key) => (
             <ConfigKey
+              currentPath={currentConfigPath}
+              setCurrentPath={setCurrentConfigPath}
+              root={true}
               onConfigChange={onConfigChange}
               key={key}
               k={key}
               v={(configData as Record<string, unknown>)[key]}
             />
           ))}
-        <button
-          style={{ marginTop: '1rem', marginBottom: '1rem' }}
-          onClick={onSave}
-        >
-          ZAPISZ
-        </button>
       </div>
     </>
   )

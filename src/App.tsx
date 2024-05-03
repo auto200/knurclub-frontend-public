@@ -7,12 +7,13 @@ import { HomeUser } from './components/HomeUser'
 import Player from './components/player/Player.tsx'
 import { AuthContext } from './contexts/AuthContext.ts'
 import { RouterContext } from './contexts/RouterContext.ts'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Config } from './Config.ts'
 import {
   Features,
   TwitchHelixScopeHelper,
 } from './util/TwitchHelixScopeHelper.ts'
+import { Settings } from './components/Settings.tsx'
 
 const makeRedirectUrl = (clientId: string, redirectUrl: string) => {
   const scopes: Features[] = [Features.SONG_REQUEST, Features.SOUND_ALERTS]
@@ -42,19 +43,32 @@ export const App = () => {
     setToken(null)
     doNavigation('/')
   }
-  function returnCurrentRoute() {
+
+  const doConsumeSession = (session: string) => {
+    setToken(session)
+    PersistentStore.setKey('token', session)
+    doNavigation('/')
+  }
+
+  const returnCurrentRoute = useCallback(() => {
     switch (path) {
       case '/v1/widget':
         return <PolakWidget />
       case '/oauth-flow':
         return <OAuthHandler />
+      case '/settings':
+        return (
+          <Home>
+            <Settings />
+          </Home>
+        )
       case '/new/player':
       case '/sr/widget':
         return <Player />
       default:
         return token ? <HomeUser /> : <Home />
     }
-  }
+  }, [path, token])
 
   return (
     <RouterContext.Provider
@@ -62,6 +76,7 @@ export const App = () => {
     >
       <AuthContext.Provider
         value={{
+          consumeSession: doConsumeSession,
           isLoggedIn: token !== null,
           login: doLogin,
           logout: doLogout,

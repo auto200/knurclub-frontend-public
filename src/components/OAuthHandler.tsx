@@ -1,20 +1,29 @@
 import { default as axios } from 'axios'
 import { Config } from '../Config'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { Home } from './Home'
-import { PersistentStore } from '../util/PersistentStore'
 
 import './OAuthHandler.css'
+import { AuthContext } from '../contexts/AuthContext.ts'
+import { RouterContext } from '../contexts/RouterContext.ts'
 
-export const OAuthHandler: React.FC = () => {
+const getCodeFromURL = () => {
   const u = new URLSearchParams(window.location.search)
-  const [result, setResult] = useState<string | null>(null)
-  const code = u.get('code')
+  return u.get('code')
+}
 
-  const backendUrl = Config.getNewBackendURL()
+export const OAuthHandler = () => {
+  const { consumeSession, isLoggedIn } = useContext(AuthContext)
+  const { navigate } = useContext(RouterContext)
 
   useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/')
+      return
+    }
+    const code = getCodeFromURL()
     if (code) {
+      const backendUrl = Config.getNewBackendURL()
       axios
         .get(
           `${backendUrl}/auth/login/twitch?authCode=${code}&redirectUrl=${encodeURIComponent(
@@ -22,22 +31,15 @@ export const OAuthHandler: React.FC = () => {
           )}`
         )
         .then((d) => {
-          setResult(d.data.token)
-          console.log(d)
+          consumeSession(d.data.token)
         })
-        .catch((e) => {
-          setResult('ERROR')
-          console.error(e)
+        .catch(() => {
+          navigate('/?error=true')
         })
+    } else {
+      navigate('/?error=true')
     }
   }, [])
-
-  useEffect(() => {
-    if (result !== null && result !== 'ERROR') {
-      PersistentStore.setKey('token', result)
-      window.location.href = '/'
-    }
-  }, [result])
 
   return (
     <Home>

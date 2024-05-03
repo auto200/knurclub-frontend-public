@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import BackendSongContext from '../context/BackendSongContext.ts'
 import { useAudioSourceCache } from '../hooks/useAudioSourceCache.ts'
 import PlaybackControlContext from '../context/PlaybackControlContext.ts'
@@ -24,6 +30,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
   const song = useContext(BackendSongContext)
   const audioSource = useAudioSourceCache(song?.audioSourceURL ?? null)
   const playbackControl = useContext(PlaybackControlContext)
+  const [songFinished, setSongFinished] = useState(false)
 
   const handleError = (e: unknown) => {
     console.error(e)
@@ -66,6 +73,7 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
       if (onEnded) {
         onEnded(generateCurrentAudioState(ref.current))
       }
+      setSongFinished(true)
     }
   }
 
@@ -81,16 +89,21 @@ const Audio = ({ onPlay, onEnded, onTimeUpdate }: AudioControllerProps) => {
     if (playbackControl && ref.current) {
       if (playbackControl.isPaused && !ref.current?.paused) {
         ref.current.pause()
-      } else if (!playbackControl.isPaused && ref.current?.paused) {
+      } else if (
+        !playbackControl.isPaused &&
+        ref.current?.paused &&
+        !songFinished
+      ) {
         ref.current.play().catch(console.error)
       }
 
       setVolume(playbackControl.volume)
     }
-  }, [playbackControl, ref.current])
+  }, [playbackControl, ref.current, songFinished])
 
   useEffect(() => {
     if (ref.current) {
+      setSongFinished(false)
       const player = ref.current
       if (player.paused) {
         player

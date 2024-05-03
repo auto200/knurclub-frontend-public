@@ -4,8 +4,10 @@ export const useNavigation = () => {
   const [path, setPath] = useState(window.location.pathname)
   const [queryString, setQueryString] = useState(window.location.search)
 
-  const doNavigation = (xxx: string) => {
-    window.history.pushState({}, '', xxx)
+  const doNavigation = (url: string) => {
+    window.history.pushState({}, '', url)
+    setPath(window.location.pathname)
+    setQueryString(window.location.search)
   }
 
   useEffect(() => {

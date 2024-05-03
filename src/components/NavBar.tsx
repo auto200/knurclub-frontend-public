@@ -6,15 +6,11 @@ import { Logo } from './Logo'
 import './NavBar.css'
 import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext.ts'
+import { RouterContext } from '../contexts/RouterContext.ts'
 
-type NavBarProps = {
-  onSettingsOpen?: () => void
-}
-
-export const NavBar = ({ onSettingsOpen }: NavBarProps) => {
-  const authContext = useContext(AuthContext)
-  if (!authContext) return null
-  const { isLoggedIn, login, logout } = authContext
+export const NavBar = () => {
+  const { isLoggedIn, login, logout } = useContext(AuthContext)
+  const { navigate } = useContext(RouterContext)
   return (
     <div
       style={{
@@ -41,7 +37,7 @@ export const NavBar = ({ onSettingsOpen }: NavBarProps) => {
         {isLoggedIn && (
           <div style={{ marginRight: '24px', display: 'flex' }}>
             <div
-              onClick={() => onSettingsOpen?.()}
+              onClick={() => navigate('/settings')}
               style={{
                 display: 'flex',
                 alignItems: 'center',

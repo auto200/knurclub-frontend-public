@@ -3,34 +3,22 @@ import { NavBar } from './NavBar'
 import './Home.css'
 import Footer from './Footer'
 import { Logo } from './Logo'
-import { ReactNode, useContext, useState } from 'react'
-import { Settings } from './Settings.tsx'
+import { ReactNode, useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext.ts'
 
 type HomeProps = {
   children?: ReactNode
 }
 export const Home = ({ children }: HomeProps) => {
-  const [isSettingsViewEnabled, setIsSettingsViewEnabled] = useState(false)
-
-  const onOpenSettings = () => {
-    setIsSettingsViewEnabled(true)
-  }
-
-  const onClose = () => {
-    setIsSettingsViewEnabled(false)
-  }
-
   const authContext = useContext(AuthContext)
 
   const login = authContext?.login ?? (() => {})
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <NavBar onSettingsOpen={onOpenSettings} />
+      <NavBar />
       <div className={'HomeContainer'}>
-        {children && !isSettingsViewEnabled && children}
-        {isSettingsViewEnabled && <Settings onClose={onClose} />}
+        {children && children}
         {!children && (
           <>
             <Logo
