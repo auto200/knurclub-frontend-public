@@ -86,6 +86,7 @@ const FeatureMatrix: Record<Features, TwitchHelixScopes[]> = {
     TwitchHelixScopes.ChannelReadHypeTrain,
     TwitchHelixScopes.ModeratorReadFollowers,
     TwitchHelixScopes.BitsRead,
+    TwitchHelixScopes.ModeratorManageBannedUsers,
   ],
   [Features.SOUND_ALERTS]: [
     TwitchHelixScopes.UserReadSubscriptions,
